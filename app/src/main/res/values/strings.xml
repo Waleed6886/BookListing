@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BookListingApplecation</string>
+    <string name="app_name">BookListing Application</string>
     <string name="edit_text">Enter book name</string>
     <string name="button_search">Search</string>
     <string name="loading">Loading</string>
