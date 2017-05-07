@@ -1,8 +1,11 @@
 package com.example.waleed.booklistingapplecation;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Parcelable;
@@ -121,7 +124,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Books> books) {
             pd.dismiss();
-            if (books == null) {
+            if (isOnline() == false){
+                Toast.makeText(MainActivity.this,
+                        "No internet available", Toast.LENGTH_LONG).show();
+            }
+            if (books == null && isOnline() == true) {
+                Toast.makeText(MainActivity.this,
+                        "No Book Available", Toast.LENGTH_LONG).show();
                 return;
             }
             booksAdapter.update(books);
@@ -148,6 +157,8 @@ public class MainActivity extends AppCompatActivity {
             String jsonResponse = "";
 
             if (url == null){
+                Toast.makeText(MainActivity.this,
+                        "Enter Book name", Toast.LENGTH_LONG).show();
                 return jsonResponse;
             }
             HttpsURLConnection urlConnection = null;
@@ -167,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
                     inputStream = urlConnection.getInputStream();
                     jsonResponse = readFromStream(inputStream);
                 }
+
             } catch (IOException e) {
                 // TODO: Handle the exception
             } finally {
@@ -181,6 +193,16 @@ public class MainActivity extends AppCompatActivity {
             return jsonResponse;
         }
 
+        public boolean isOnline() {
+            ConnectivityManager cm =
+                    (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo netInfo = cm.getActiveNetworkInfo();
+            if(netInfo != null && netInfo.isConnectedOrConnecting())
+               return true;
+            else
+                return false;
+
+        }
         /**
          * Convert the {@link InputStream} into a String which contains the
          * whole JSON response from the server.

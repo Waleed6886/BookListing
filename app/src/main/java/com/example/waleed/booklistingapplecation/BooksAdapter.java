@@ -64,8 +64,8 @@ public class BooksAdapter extends ArrayAdapter<Books> {
         return books;
     }
 
-    @Override
-    public int getCount() {
-        return books.size();
-    }
+//    @Override
+//    public int getCount() {
+//        return books.size();
+//    }
 }
